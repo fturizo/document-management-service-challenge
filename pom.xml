@@ -97,6 +97,9 @@
                     <layers>
                         <enabled>true</enabled>
                     </layers>
+                    <image>
+                        <name>clara/${project.artifact.name}:${project.version}</name>
+                    </image>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
@@ -105,6 +108,33 @@
 					</excludes>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <configuration>
+                    <imageName>${project.artifact.name}-${project.version}</imageName>
+                    <jvmArgs>
+                        <jvmArg>--gc=serial</jvmArg>
+                        <jvmArg>-XX:MaximumHeapSizePercent=85</jvmArg>
+                    </jvmArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.hibernate.orm.tooling</groupId>
+                <artifactId>hibernate-enhance-maven-plugin</artifactId>
+                <version>${hibernate.version}</version>
+                <executions>
+                    <execution>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>enhance</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <enableLazyInitialization>true</enableLazyInitialization>
+                </configuration>
+            </plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>

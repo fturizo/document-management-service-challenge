@@ -15,7 +15,9 @@ services:
       - POSTGRESQL_DATABASE=challenge
       - POSTGRESQL_POSTGRES_PASSWORD=admin_postgres_2026 # Password of user "postgres"
   minio:
-    image: minio/minio:latest
+    # Downgraded the version of minio to a Community release image that supports
+    #  access key features in the web console
+    image: minio/minio:RELEASE.2025-04-22T22-12-26Z
     container_name: minio
     restart: always
     ports:
@@ -25,17 +27,34 @@ services:
       MINIO_ROOT_USER: admin
       MINIO_ROOT_PASSWORD: minio_2026
     command: server --console-address ":9001" /data
+    networks:
+      - batch_network
     volumes:
       - challenge_minio_data:/data
-  # Include all the necessary settings to include a document management service in the stack
-  # Remember to configure this service to limit the memory to 50MB
-  # document-management-service:
-  #    environment:
-  #      - JAVA_OPTS=-Xmx50m -Xms50m
-  #    deploy:
-  #      resources:
-  #        limits:
-  #          memory: 50M
+  dms:
+    container_name: dms_app
+    image: clara/document-management-service-challenge:0.0.1-SNAPSHOT
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/challenge
+      SPRING_DATASOURCE_USERNAME: DOC_MANAGER
+      SPRING_DATASOURCE_PASSWORD: DOC_MANAGER_2026
+      APP_DOCUMENT_STORAGE_BUCKET_NAME: dms
+      APP_DOCUMENT_STORAGE_ENDPOINT_URL: http://minio:9000/
+      APP_DOCUMENT_STORAGE_ACCESS_KEY: LIwNgkpZ1wjPrLG0Pz61
+      APP_DOCUMENT_STORAGE_SECRET_KEY: gpFb2RldNcWeAkHW17M3QGuaigIWEWTlY4o1QNro
+    command:
+      - -Dspring.aot.enabled=true
+    networks:
+      - batch_network
+    deploy:
+      resources:
+        limits:
+          memory: 50M
+    depends_on:
+      - postgresql
+      - minio
 
 volumes:
   challenge_postgresql_data:
