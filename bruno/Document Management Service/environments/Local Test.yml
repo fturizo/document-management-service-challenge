@@ -1,0 +1,6 @@
+name: Local Test
+variables:
+  - name: username
+    value: fturizo
+  - secret: true
+    name: password
