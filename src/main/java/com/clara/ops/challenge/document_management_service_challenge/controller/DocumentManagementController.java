@@ -1,6 +1,7 @@
 package com.clara.ops.challenge.document_management_service_challenge.controller;
 
 import com.clara.ops.challenge.document_management_service_challenge.controller.dto.DocumentData;
+import com.clara.ops.challenge.document_management_service_challenge.controller.dto.DocumentLocation;
 import com.clara.ops.challenge.document_management_service_challenge.entity.User;
 import com.clara.ops.challenge.document_management_service_challenge.exceptions.ControllerException;
 import com.clara.ops.challenge.document_management_service_challenge.service.DocumentService;
@@ -9,12 +10,10 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -51,6 +50,12 @@ public class DocumentManagementController {
           HttpStatus.INTERNAL_SERVER_ERROR,
           "IO error encountered during file upload: %s".formatted(exception.getMessage()));
     }
+  }
+
+  @GetMapping(value = "/download/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<DocumentLocation> getDownloadData(@PathVariable long id) {
+    var location = documentService.retrieveLocation(id, currentUser());
+    return ResponseEntity.ok(location);
   }
 
   private User currentUser() {

@@ -46,7 +46,7 @@ public class DocumentMetadata implements Serializable {
   @Column(name = "tag", nullable = false, columnDefinition = "VARCHAR", length = 20)
   private Set<String> tags;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(
       name = "owner_id",
       referencedColumnName = "id",

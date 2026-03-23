@@ -1,12 +1,10 @@
 package com.clara.ops.challenge.document_management_service_challenge.service;
 
 import com.clara.ops.challenge.document_management_service_challenge.controller.dto.DocumentData;
+import com.clara.ops.challenge.document_management_service_challenge.controller.dto.DocumentLocation;
 import com.clara.ops.challenge.document_management_service_challenge.entity.DocumentMetadata;
 import com.clara.ops.challenge.document_management_service_challenge.entity.User;
-import com.clara.ops.challenge.document_management_service_challenge.exceptions.ConcurrentThresholdReachedException;
-import com.clara.ops.challenge.document_management_service_challenge.exceptions.DocumentConflictException;
-import com.clara.ops.challenge.document_management_service_challenge.exceptions.DocumentValidationException;
-import com.clara.ops.challenge.document_management_service_challenge.exceptions.StorageException;
+import com.clara.ops.challenge.document_management_service_challenge.exceptions.*;
 import java.io.InputStream;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -47,14 +45,7 @@ public class DocumentService {
           storageService.storeFile(
               owner.getUsername(), data.name(), fileSize, contentType, contentStream);
       if (!storageOutcome.success()) {
-        var incidentID = UUID.randomUUID().toString();
-        if (storageOutcome.error() != null) {
-          log.error(
-              "(IncidentID: {}) {}", incidentID, storageOutcome.message(), storageOutcome.error());
-        } else {
-          log.error("(IncidentID: {}) {}", incidentID, storageOutcome.message());
-        }
-        throw new StorageException(incidentID);
+        processErrorOutcome(storageOutcome);
       }
       // TODO - Validate that transaction completes correctly and if not, retry the operation and if
       // possible, delete the file if saving the metadata is not possible
@@ -62,5 +53,30 @@ public class DocumentService {
     } finally {
       concurrentUploads.decrementAndGet();
     }
+  }
+
+  public DocumentLocation retrieveLocation(long id, User requester) {
+    var metadata =
+        metadataService.retrieveMetadata(id).orElseThrow(() -> new DocumentNotFoundException(id));
+    if (!metadata.getOwner().equals(requester)) {
+      throw new DocumentAccessException();
+    }
+    var locationOutcome =
+        storageService.getDownloadURL(metadata.getOwner().getUsername(), metadata.getName());
+    if (!locationOutcome.success()) {
+      processErrorOutcome(locationOutcome);
+    }
+    return new DocumentLocation(
+        locationOutcome.message(), storageService.getExpiryTime(), storageService.getExpiryUnit());
+  }
+
+  private void processErrorOutcome(StorageService.Outcome outcome) {
+    var incidentID = UUID.randomUUID().toString();
+    if (outcome.error() != null) {
+      log.error("(IncidentID: {}) {}", incidentID, outcome.message(), outcome.error());
+    } else {
+      log.error("(IncidentID: {}) {}", incidentID, outcome.message());
+    }
+    throw new StorageException(incidentID);
   }
 }
