@@ -114,11 +114,14 @@
                 <configuration>
                     <imageName>${project.artifact.name}-${project.version}</imageName>
                     <jvmArgs>
+                        <!-- SerialGC is the default GC alg for GraalVM, but we explicitly set it -->
                         <jvmArg>--gc=serial</jvmArg>
+                        <!-- Increase the maximum available Heap memory to the JVM to 85% of the container image's memory -->
                         <jvmArg>-XX:MaximumHeapSizePercent=85</jvmArg>
                     </jvmArgs>
                 </configuration>
             </plugin>
+            <!-- Required to allow AOT compilation to generate Hibernate/JPA entity proxy classes -->
             <plugin>
                 <groupId>org.hibernate.orm.tooling</groupId>
                 <artifactId>hibernate-enhance-maven-plugin</artifactId>
