@@ -39,7 +39,7 @@ This challenge is designed for a mid-senior engineer to demonstrate advanced ski
 **📌 Storage Requirement: Uploading Documents to MinIO**
 
 All uploaded documents must be stored in MinIO to ensure scalability and efficient storage management. The service will interact with MinIO to handle file uploads and generate temporary access URLs for retrieval. For detailed instructions on how to set up and use MinIO locally, please refer to the following document:
-📄 [MinIO Local Setup Guide](docs/minio-local-setup.md).
+📄 [MinIO Local Setup Guide](minio-local-setup.md).
 
 ### 2. Search Endpoint 🔍
 
@@ -63,7 +63,7 @@ All uploaded documents must be stored in MinIO to ensure scalability and efficie
 ### Note:
 
 For more details on how to use MinIO, refer to the documentation:
-📄 [MinIO Local Setup Guide](docs/minio-local-setup.md).
+📄 [MinIO Local Setup Guide](minio-local-setup.md).
 
 ## Technical Requirements ⚙️
 
@@ -79,7 +79,7 @@ For more details on how to use MinIO, refer to the documentation:
 - **Provided Artifacts:**
 
   - OpenAPI specification that includes the contract for the endpoints.
-    - Reference: [document-management-open-api.yml](docs/document-management-open-api.yml).
+    - Reference: [document-management-open-api.yml](document-management-open-api.yml).
     - You can visualize the content using [Swagger Editor](https://editor-next.swagger.io/).
   - A docker-compose stack that includes PostgreSQL, and the Document Management Service.
   - Integrated tools:

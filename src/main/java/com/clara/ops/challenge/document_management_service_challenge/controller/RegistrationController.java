@@ -35,7 +35,7 @@ public class RegistrationController {
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Void> saveNewUser(@RequestBody @Valid UserData data) {
     if (userService.getUser(data.username()).isPresent()) {
-      throw new ControllerException(HttpStatus.BAD_REQUEST, "Username already exists");
+      throw new ControllerException(HttpStatus.CONFLICT, "Username already exists");
     }
     log.debug("Registering new user data: {} - {}", data.username(), data.fullName());
     var newUser = userService.saveNewUser(data.username(), data.password(), data.fullName());
