@@ -10,6 +10,14 @@ import org.hibernate.proxy.HibernateProxy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/**
+ * Represents a user in the document management system. <br>
+ * This class is a JPA entity mapped to the "document_users" table within the "document_schema"
+ * schema. It implements the {@link UserDetails} interface to integrate with Spring Security for
+ * authentication and authorization. <br>
+ * The user is identified uniquely by an integer ID and has attributes such as username, password,
+ * and full name. The ID is generated automatically and is immutable.
+ */
 @Entity
 @Table(name = "document_users", schema = "document_schema")
 @Getter

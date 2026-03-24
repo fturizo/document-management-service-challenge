@@ -9,6 +9,14 @@ import java.util.Set;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
+/**
+ * Represents metadata for a document, including its attributes such as name, creation timestamp,
+ * file size, tags, and associated owner. <br>
+ * This class is a JPA entity mapped to the "document_metadata" table in the "document_schema"
+ * database schema. <br>
+ * The metadata is immutable for certain fields such as the unique identifier (id) and creation
+ * timestamp (createdAt).
+ */
 @Entity
 @Table(name = "document_metadata", schema = "document_schema")
 @Getter

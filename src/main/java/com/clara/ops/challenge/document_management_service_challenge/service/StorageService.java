@@ -15,6 +15,11 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+/**
+ * A service for managing file storage operations with MinIO client integration. Provides
+ * functionalities such as bucket verification, file storage, and generating presigned URLs for
+ * download.
+ */
 @Service
 @Slf4j
 public class StorageService {
@@ -44,6 +49,13 @@ public class StorageService {
     return String.format("%s/%s", userName, fileName);
   }
 
+  /**
+   * Verifies if the specified bucket exists in the MinIO storage system.
+   *
+   * @param bucketName the name of the bucket to verify
+   * @return an {@code Outcome} indicating success if the bucket exists, or an error with an
+   *     appropriate message otherwise
+   */
   public Outcome verifyBucketExists(String bucketName) {
     var arguments = BucketExistsArgs.builder().bucket(bucketName).build();
     try {
@@ -64,6 +76,19 @@ public class StorageService {
     }
   }
 
+  /**
+   * Stores a file in the specified MinIO bucket. This method verifies if the bucket exists before
+   * attempting to store the file. If the bucket doesn't exist or an error occurs during the upload
+   * process, an appropriate error message is returned.
+   *
+   * @param userName the name of the user to associate with the file into its final path
+   * @param fileName the name of the file to be stored
+   * @param fileSize the size of the file in bytes
+   * @param contentType the MIME type of the file
+   * @param contents the input stream containing the file's data
+   * @return an {@code Outcome} indicating success if the file is successfully uploaded, or an error
+   *     with an appropriate message otherwise
+   */
   public Outcome storeFile(
       String userName, String fileName, long fileSize, String contentType, InputStream contents) {
     var verificationOutcome = verifyBucketExists(bucketName);
@@ -100,6 +125,16 @@ public class StorageService {
     }
   }
 
+  /**
+   * Generates a MinIO pre-signed URL that can be used to download a previously stored document
+   * file.
+   *
+   * @param userName The username of the user that owns the document.
+   * @param fileName The name of the file to locate.
+   * @return an {@code Outcome} indicating success if the download URL has been successfully
+   *     generated, or an error with an appropriate message otherwise. In case of success the
+   *     outcome's <code>message</code> property will contain the value of the pre-signed URL.
+   */
   public Outcome getDownloadURL(String userName, String fileName) {
     var arguments =
         GetPresignedObjectUrlArgs.builder()
@@ -142,5 +177,14 @@ public class StorageService {
     return new Outcome(false, errorMessage, throwable);
   }
 
+  /**
+   * A utility record class used to hold the outcome of a public storage operation.
+   *
+   * @param success Indicates if the operation was successful or not.
+   * @param message Holds either context information in the case of success or an error message in
+   *     case of failure.
+   * @param error In case of failure it MAY contain the {@link Throwable} source of an error that
+   *     caused the failure.
+   */
   public record Outcome(boolean success, String message, Throwable error) {}
 }

@@ -13,15 +13,25 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * Centralized exception handler for the application that manages various types of exceptions and
  * formats error responses consistently. This class leverages Spring's {@code @RestControllerAdvice}
  * to intercept and process exceptions globally. <br>
- * The handled exceptions include: - {@link MethodArgumentNotValidException}: Thrown when a method
- * argument fails validation. - {@link ControllerException}: Represents generic REST controller
- * exceptions. - {@link DocumentValidationException}: Indicates a validation error related to
- * document input. - {@link DocumentConflictException}: Specifies conflicts when a document with the
- * same name exists. - {@link DocumentNotFoundException}: Specifies that a document cannot be found
- * in the system. - {@link DocumentAccessException}: Indicates forbidden access to a document. -
- * {@link ConcurrentThresholdReachedException}: Triggered when the concurrent upload limit is
- * exceeded. - {@link StorageException}: Handles internal server errors related to storage
- * operations. <br>
+ * The handled exceptions include:
+ *
+ * <ul>
+ *   <li>{@link MethodArgumentNotValidException}: Thrown when a method argument fails validation.
+ *   <li>{@link ControllerException}: Represents generic REST controller exceptions.
+ *   <li>{@link DocumentValidationException}: Indicates a validation error related to document
+ *       input.
+ *   <li>{@link DocumentSizeExceededException}: Indicates a that a document size exceeds the file
+ *       size limit for uploads.
+ *   <li>{@link DocumentConflictException}: Specifies conflicts when a document with the same name
+ *       exists.
+ *   <li>{@link DocumentNotFoundException}: Specifies that a document cannot be found in the system.
+ *   <li>{@link DocumentAccessException}: Indicates forbidden access to a document.
+ *   <li>{@link ConcurrentThresholdReachedException}: Triggered when the concurrent upload limit is
+ *       exceeded
+ *   <li>{@link StorageException}: Handles internal server errors related to storage operations.
+ * </ul>
+ *
+ * <br>
  * Custom error responses are encapsulated in the {@code ErrorDetails} DTO record, which includes a
  * general message and a list of specific errors (if applicable).
  */

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * A simple REST controller that allows users to registers themselves in the service to upload and
+ * A simple REST controller that allows users to register themselves in the service to upload and
  * interact with their documents.
  */
 @RestController
@@ -27,10 +27,15 @@ public class RegistrationController {
   private final UserService userService;
 
   /**
-   * Registers a new user in the service.
+   * Registers a new user by saving their data to the persistent storage. The method ensures that
+   * the provided username does not already exist in the system.
    *
-   * @param data Contains the new user information to register
-   * @return A response with the outcome of the operation
+   * @param data The {@link UserData} containing information about the new user such as username,
+   *     password, and full name. The input should be valid and adhere to the constraints defined in
+   *     the {@link UserData} record.
+   * @return A {@link ResponseEntity} with a void body, indicating that the operation was
+   *     successfully completed.
+   * @throws ControllerException if the provided username already exists in the system.
    */
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Void> saveNewUser(@RequestBody @Valid UserData data) {

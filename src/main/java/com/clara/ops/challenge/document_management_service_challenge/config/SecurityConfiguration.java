@@ -11,6 +11,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * SecurityConfiguration class defines the security settings and configurations for the application
+ * using Spring Security. It enables web security, configures HTTP security, and provides beans for
+ * password encoding and security filter chain. <br>
+ * The class includes the definition of a stateless session management policy and disables
+ * Cross-Site Request Forgery (CSRF) and Cross-Origin Resource Sharing (CORS) to allow access to
+ * specific endpoints. <br>
+ * It also enforces authentication for all incoming requests except to the resources exposed by the
+ * {@link
+ * com.clara.ops.challenge.document_management_service_challenge.controller.DocumentManagementController}
+ * controller.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {

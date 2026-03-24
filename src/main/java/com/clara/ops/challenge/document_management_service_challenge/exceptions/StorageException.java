@@ -1,16 +1,14 @@
 package com.clara.ops.challenge.document_management_service_challenge.exceptions;
 
 /**
- * Runtime exception used to inform of unexpected errors encountered during storage service
- * operations.
+ * Exception thrown when an internal server error occurs during file storage operations. <br>
+ * This runtime exception includes an Incident ID in its error message to assist in identifying the
+ * associated log entry for further investigation and debugging. Used in scenarios where file
+ * storage processes encounter unexpected errors. <br>
+ * Extends {@link RuntimeException} to represent an unchecked exception.
  */
 public class StorageException extends RuntimeException {
 
-  /**
-   * Creates a new storage exception.
-   *
-   * @param incidentID An internal incident reference to track the error on the application logs.
-   */
   public StorageException(String incidentID) {
     super(
         "Internal server error encountered during file storage, check log entry with Incident ID: %s"

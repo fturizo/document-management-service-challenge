@@ -15,7 +15,7 @@ The application is compiled as a **GraalVM native image** for minimal memory foo
 
 ## Tech Stack
 
-|    Component     | Technology                                                                        |
+|    Component     |                                    Technology                                     |
 |------------------|-----------------------------------------------------------------------------------|
 | Language         | Java 17                                                                           |
 | Framework        | Spring Boot, Spring MVC, Spring Data JPA, Spring Security, Spring Bean Validation |
@@ -24,7 +24,7 @@ The application is compiled as a **GraalVM native image** for minimal memory foo
 | Native Image     | Oracle GraalVM (via Spring Boot Buildpacks)                                       |
 | Build Tool       | Maven (version 3.9.11 required as a minimum)                                      |
 | Containerization | Docker / Docker Compose                                                           |
-| Testing          | JUnit 5, Mockito, Testcontainers, TestRestTemplate                                | 
+| Testing          | JUnit 5, Mockito, Testcontainers, TestRestTemplate                                |
 
 ## Testing
 
@@ -35,21 +35,21 @@ The project includes two main test suites to ensure both service logic and API i
 - **Technology Stack:** JUnit 5, Mockito.
 - **Focus:** Isolates service logic (`DocumentService`, `UserService`) using Mockito to mock dependencies like `UserRepository`, `StorageService`, and `MetadataService`.
 - **Key Tests:**
-    - User registration and password encryption.
-    - Document upload validation (file types, size limits, duplicates).
-    - Concurrency check: Verifies that `ConcurrentThresholdReachedException` is thrown when more than 10 parallel uploads occur.
-    - Secure download URL generation and access control.
+  - User registration and password encryption.
+  - Document upload validation (file types, size limits, duplicates).
+  - Concurrency check: Verifies that `ConcurrentThresholdReachedException` is thrown when more than 10 parallel uploads occur.
+  - Secure download URL generation and access control.
 
 ### Integration Tests
 
 - **Technology Stack:** Testcontainers (PostgreSQL, MinIO), `TestRestTemplate`, `MinioClient`.
 - **Focus:** Runs the full application context and tests the REST endpoints against real service containers.
 - **Key Tests:**
-    - **Registration Integration:** Validates user creation, duplicate handling, and validation errors.
-    - **Document Management Integration:**
-        - End-to-end upload/download/search flows.
-        - Large file upload validation (500MB+).
-        - Direct verification in MinIO using `MinioClient` to confirm persistence.
+  - **Registration Integration:** Validates user creation, duplicate handling, and validation errors.
+  - **Document Management Integration:**
+    - End-to-end upload/download/search flows.
+    - Large file upload validation (500MB+).
+    - Direct verification in MinIO using `MinioClient` to confirm persistence.
 - **Base Class:** `BaseIntegrationTest` manages the lifecycle of the PostgreSQL and MinIO containers using the singleton container pattern.
 
 ### Running Tests
@@ -148,7 +148,7 @@ You can also access the MinIO Web Console at http://localhost:9001 using the roo
 
 ### 5. Troubleshooting
 
-On Windows OS environments, the `minio-init` container may fail to run the bucket and key initialization shell script due to the script being check out by Git using Windows-style line breaks (`CRLF`). 
+On Windows OS environments, the `minio-init` container may fail to run the bucket and key initialization shell script due to the script being check out by Git using Windows-style line breaks (`CRLF`).
 
 To fix this issue, you may use an utility to fix the line breaks to work on Linux environments such as `dos2unix` and then starting the `minio-init` container again.
 
