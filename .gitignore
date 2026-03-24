@@ -25,3 +25,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### GraalVM Native Output from Tracing Agent ###
+/native-output/
