@@ -72,8 +72,7 @@ public class DocumentService {
       } else if (metadataService.documentExists(data.name(), owner)) {
         throw new DocumentConflictException(data.name());
       } else if (fileSize / BYTES_MB_EQUIVALENT > MAX_FILE_SIZE_MB) {
-        throw new DocumentValidationException(
-            "File size cannot exceed %dMB".formatted(MAX_FILE_SIZE_MB));
+        throw new DocumentSizeExceededException(MAX_FILE_SIZE_MB);
       }
       var storageOutcome =
           storageService.storeFile(

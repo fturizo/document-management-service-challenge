@@ -54,6 +54,13 @@ public class GeneralExceptionHandler {
         .body(new ErrorDetails(exception.getMessage()));
   }
 
+  @ExceptionHandler(DocumentSizeExceededException.class)
+  public ResponseEntity<ErrorDetails> handleDocumentSizeExceededException(
+      DocumentSizeExceededException exception) {
+    return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+        .body(new ErrorDetails(exception.getMessage()));
+  }
+
   @ExceptionHandler(DocumentConflictException.class)
   public ResponseEntity<ErrorDetails> handleDocumentConflictException(
       DocumentConflictException exception) {

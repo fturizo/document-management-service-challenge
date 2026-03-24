@@ -53,6 +53,7 @@ paths:
       summary: Upload a new document
       description: |
         Uploads a new PDF document along with its metadata.
+        The document size cannot exceed 500MB.
         This operation supports a maximum threshold of 10 concurrent uploads in the entire service.
       operationId: uploadNewDocument
       security:
@@ -100,6 +101,13 @@ paths:
         '409':
           description: |
             Conflict – a document with the same name uploaded by the authenticated user already exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '413':
+          description: |
+            Payload too large – The size of the uploaded document exceed the 500MB limit.
           content:
             application/json:
               schema:
