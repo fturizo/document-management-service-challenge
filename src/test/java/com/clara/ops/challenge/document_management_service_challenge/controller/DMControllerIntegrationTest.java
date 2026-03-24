@@ -23,7 +23,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class DocumentManagementControllerIntegrationTest extends BaseIntegrationTest {
+class DMControllerIntegrationTest extends BaseIntegrationTest {
 
   @Autowired private TestRestTemplate restTemplate;
 
