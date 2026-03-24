@@ -8,6 +8,14 @@
     "name":"io.minio.BucketExistsArgs$Builder"
   },
   {
+    "name":"io.minio.GetPresignedObjectUrlArgs",
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"io.minio.GetPresignedObjectUrlArgs$Builder"
+  },
+  {
     "name":"io.minio.MinioClient"
   },
   {
@@ -29,6 +37,9 @@
   },
   {
     "name":"io.minio.errors.InsufficientDataException"
+  },
+  {
+    "name":"io.minio.http.Method"
   },
   {
     "name":"io.minio.messages.CompleteMultipartUpload",
@@ -57,6 +68,13 @@
     "methods":[{"name":"<init>","parameterTypes":[] }]
   },
   {
+    "name":"io.minio.messages.LocationConstraint",
+    "allDeclaredFields":true,
+    "queryAllDeclaredMethods":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
     "name":"io.minio.messages.Part",
     "allDeclaredFields":true,
     "queryAllDeclaredMethods":true,
@@ -69,5 +87,9 @@
   {
     "name":"org.simpleframework.xml.core.ElementListLabel",
     "methods":[{"name":"<init>","parameterTypes":["org.simpleframework.xml.core.Contact","org.simpleframework.xml.ElementList","org.simpleframework.xml.stream.Format"] }]
+  },
+  {
+    "name":"org.simpleframework.xml.core.TextLabel",
+    "methods":[{"name":"<init>","parameterTypes":["org.simpleframework.xml.core.Contact","org.simpleframework.xml.Text","org.simpleframework.xml.stream.Format"] }]
   }
 ]
