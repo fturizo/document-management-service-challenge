@@ -12,7 +12,7 @@ http:
       - name: file
         type: file
         value:
-          - C:\Users\fabio\Downloads\small-pdf-sample.pdf
+          - C:\Users\fabio\OneDrive\SamplePDFDocs\small-pdf-sample.pdf
       - name: data
         type: text
         value: |-
