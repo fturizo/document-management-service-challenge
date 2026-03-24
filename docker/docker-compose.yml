@@ -10,10 +10,15 @@ services:
       - challenge_postgresql_data:/bitnami/postgresql
       - ./init-scripts:/docker-entrypoint-initdb.d
     environment:
-      - POSTGRESQL_USERNAME=DOC_MANAGER
-      - POSTGRESQL_PASSWORD=DOC_MANAGER_2026
-      - POSTGRESQL_DATABASE=challenge
-      - POSTGRESQL_POSTGRES_PASSWORD=admin_postgres_2026 # Password of user "postgres"
+      - POSTGRESQL_USERNAME=${DB_USER}
+      - POSTGRESQL_PASSWORD=${DB_PASSWORD}
+      - POSTGRESQL_DATABASE=${DB_NAME}
+      - POSTGRESQL_POSTGRES_PASSWORD=${DB_SUPER_PWD} # Password of user "postgres"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -h localhost" ]
+      interval: 5s
+      timeout: 5s
+      retries: 3
   minio:
     # Downgraded the version of minio to a Community release image that supports
     #  access key features in the web console
@@ -24,26 +29,41 @@ services:
       - "9000:9000"  # API S3
       - "9001:9001"  # MinIO Web Console
     environment:
-      MINIO_ROOT_USER: admin
-      MINIO_ROOT_PASSWORD: minio_2026
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PWD}
     command: server --console-address ":9001" /data
     networks:
       - batch_network
     volumes:
       - challenge_minio_data:/data
+  minio-init:
+    image: minio/mc
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PWD}
+      BUCKET_NAME: ${MINIO_BUCKET_NAME}
+      ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      SECRET_KEY: ${MINIO_SECRET_KEY}
+    depends_on:
+      - minio
+    entrypoint: sh /init.sh
+    networks:
+      - batch_network
+    volumes:
+      - ./init-minio.sh:/init.sh
   dms:
     container_name: dms_app
     image: clara/document-management-service-challenge:0.0.1-SNAPSHOT
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/challenge
-      SPRING_DATASOURCE_USERNAME: DOC_MANAGER
-      SPRING_DATASOURCE_PASSWORD: DOC_MANAGER_2026
-      APP_DOCUMENT_STORAGE_BUCKET_NAME: dms
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      APP_DOCUMENT_STORAGE_BUCKET_NAME: ${MINIO_BUCKET_NAME}
       APP_DOCUMENT_STORAGE_ENDPOINT_URL: http://minio:9000/
-      APP_DOCUMENT_STORAGE_ACCESS_KEY: LIwNgkpZ1wjPrLG0Pz61
-      APP_DOCUMENT_STORAGE_SECRET_KEY: gpFb2RldNcWeAkHW17M3QGuaigIWEWTlY4o1QNro
+      APP_DOCUMENT_STORAGE_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      APP_DOCUMENT_STORAGE_SECRET_KEY: ${MINIO_SECRET_KEY}
     command:
       - -Dspring.aot.enabled=true
     networks:
@@ -53,8 +73,10 @@ services:
         limits:
           memory: 50M
     depends_on:
-      - postgresql
-      - minio
+      postgresql:
+        condition: service_healthy
+      minio:
+        condition: service_started
 
 volumes:
   challenge_postgresql_data:
