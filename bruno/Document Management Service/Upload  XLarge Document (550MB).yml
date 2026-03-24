@@ -1,7 +1,7 @@
 info:
-  name: Upload Document
+  name: Upload  XLarge Document (550MB)
   type: http
-  seq: 1
+  seq: 5
 
 http:
   method: POST
@@ -12,12 +12,12 @@ http:
       - name: file
         type: file
         value:
-          - C:\Users\fabio\Downloads\document-350mb.pdf
+          - C:\Users\fabio\Downloads\xlarge-pdf-sample.pdf
       - name: data
         type: text
         value: |-
           {
-           "name": "DummyPDF",
+           "name": "XLargeDummyPDFFile",
            "tags": ["lorem-ipsum", "test"]
           }
         contentType: application/json

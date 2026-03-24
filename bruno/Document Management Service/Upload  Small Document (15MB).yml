@@ -1,0 +1,30 @@
+info:
+  name: Upload  Small Document (15MB)
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:8080/document-management/upload
+  body:
+    type: multipart-form
+    data:
+      - name: file
+        type: file
+        value:
+          - C:\Users\fabio\Downloads\small-pdf-sample.pdf
+      - name: data
+        type: text
+        value: |-
+          {
+           "name": "LabResults",
+           "tags": ["health", "tests"]
+          }
+        contentType: application/json
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
