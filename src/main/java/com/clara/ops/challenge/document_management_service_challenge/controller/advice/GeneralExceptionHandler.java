@@ -74,6 +74,13 @@ public class GeneralExceptionHandler {
         .body(new ErrorDetails(exception.getMessage()));
   }
 
+  @ExceptionHandler(InvalidSortCriteriaException.class)
+  public ResponseEntity<ErrorDetails> handleInvalidSortCriteriaException(
+      InvalidSortCriteriaException exception) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(new ErrorDetails(exception.getMessage()));
+  }
+
   @ExceptionHandler(DocumentNotFoundException.class)
   public ResponseEntity<ErrorDetails> handleDocumentNotFoundException(
       DocumentNotFoundException exception) {

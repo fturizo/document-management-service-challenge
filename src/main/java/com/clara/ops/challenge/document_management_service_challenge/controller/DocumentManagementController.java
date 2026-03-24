@@ -2,6 +2,8 @@ package com.clara.ops.challenge.document_management_service_challenge.controller
 
 import com.clara.ops.challenge.document_management_service_challenge.controller.dto.DocumentData;
 import com.clara.ops.challenge.document_management_service_challenge.controller.dto.DocumentLocation;
+import com.clara.ops.challenge.document_management_service_challenge.controller.dto.NewDocumentData;
+import com.clara.ops.challenge.document_management_service_challenge.controller.dto.SearchData;
 import com.clara.ops.challenge.document_management_service_challenge.entity.User;
 import com.clara.ops.challenge.document_management_service_challenge.exceptions.ControllerException;
 import com.clara.ops.challenge.document_management_service_challenge.service.DocumentService;
@@ -9,6 +11,10 @@ import jakarta.validation.Valid;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +34,7 @@ public class DocumentManagementController {
   @PostMapping("/upload")
   public ResponseEntity<Void> uploadNewDocument(
       @RequestPart("file") MultipartFile document,
-      @RequestPart @Valid DocumentData data,
+      @RequestPart @Valid NewDocumentData data,
       UriComponentsBuilder ucb)
       throws ControllerException {
     var contentType = document.getContentType();
@@ -56,6 +62,19 @@ public class DocumentManagementController {
   public ResponseEntity<DocumentLocation> getDownloadData(@PathVariable long id) {
     var location = documentService.retrieveLocation(id, currentUser());
     return ResponseEntity.ok(location);
+  }
+
+  @GetMapping(
+      value = "/search",
+      produces = MediaType.APPLICATION_JSON_VALUE,
+      consumes = MediaType.APPLICATION_JSON_VALUE)
+  public PagedModel<DocumentData> searchDocuments(
+      @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.ASC)
+          Pageable pageable,
+      @RequestBody SearchData data) {
+    var requester = currentUser();
+    var page = documentService.searchDocuments(data.name(), data.tags(), requester, pageable);
+    return new PagedModel<>(page);
   }
 
   private User currentUser() {

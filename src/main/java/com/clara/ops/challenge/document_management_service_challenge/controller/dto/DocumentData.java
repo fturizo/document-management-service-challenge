@@ -1,25 +1,16 @@
 package com.clara.ops.challenge.document_management_service_challenge.controller.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
- * Used to hold information on the document data provided during an upload operation.
+ * Represents metadata about a document in the system.
  *
- * @param name The name of the document
- * @param tags A set of tags attached to the document
+ * @param id The unique identifier of the document.
+ * @param name The name of the document.
+ * @param fileSize The size of the document in bytes.
+ * @param createdAt The date and time the document was created.
+ * @param tags A set of tags associated with the document.
  */
 public record DocumentData(
-    @NotBlank(message = "Name cannot be empty")
-        @Size(max = 50, message = "Document name cannot exceed 50 characters")
-        @Pattern(
-            regexp = "^[a-zA-Z0-9]*$",
-            message =
-                "Document name contains invalid characters. Only letters and numbers are allowed.")
-        String name,
-    Set<
-            @NotBlank(message = "Tag cannot be empty")
-            @Size(max = 20, message = "Tag name cannot exceed 20 characters") String>
-        tags) {}
+    long id, String name, long fileSize, LocalDateTime createdAt, Set<String> tags) {}
