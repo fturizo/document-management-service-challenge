@@ -100,7 +100,7 @@ The application is packaged as a native Docker image using the Spring Boot Build
 ./mvnw -Pnative spring-boot:build-image
 ```
 
-Note: This process may take several minutes as it performs Ahead-of-Time (AOT) compilation via GraalVM using Spring Boot integration with the GraalVM Native image Maven plugin. You may also use `-Dskip-tests` to avoid running the test suites and increase the build time.
+Note: This process may take several minutes as it performs Ahead-of-Time (AOT) compilation via GraalVM using Spring Boot integration with the GraalVM Native image Maven plugin. You may also use `-Dskip-tests` to avoid running the test suites and decrease the build time.
 
 Ensure Docker is running, as the build uses Docker to create the native image.
 This will produce a Docker image named `clara/document-management-service-challenge:0.0.1-SNAPSHOT`.
