@@ -38,6 +38,7 @@ services:
       - challenge_minio_data:/data
   minio-init:
     image: minio/mc
+    container_name: init-script
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PWD}
