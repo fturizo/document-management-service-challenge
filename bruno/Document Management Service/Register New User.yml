@@ -12,7 +12,7 @@ http:
       {
         "username": "{{username}}",
         "password": "{{password}}",
-        "fullName": "Fabio Turizo"
+        "fullName": "Michael Alfa"
       }
 
 settings:

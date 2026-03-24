@@ -1,6 +1,6 @@
 name: Local Test
 variables:
   - name: username
-    value: fturizo
+    value: malfa
   - secret: true
     name: password
